@@ -1,13 +1,47 @@
-import Image from 'next/image'
+//* Libraries imports
+import Image from 'next/image';
+import Link from 'next/link';
+
+import BgArt from "@/components/BgArt";
 
 export default function Home() {
   return (
-    <main className="flex flex-row items-center justify-between min-h-screen">
-      <div className='w-1/2'></div>
-      <div className='w-1/2'>
-        <h1>Yugioh Deck Builder</h1>
-        <p>A deck builder for Yugioh</p>
+    <div className="flex flex-row items-start min-h-screen relative">
+      <div className='absolute left-0 top-0 w-full h-full'>
+        <BgArt />
       </div>
-    </main>
+
+      <div className='flex flex-row justify-center items-center w-full h-full relative'>
+        {/* left side */}
+        <CTA />
+
+        {/* right side */}
+        <div className="flex flex-col w-full h-full bg-yellow-500" />
+      </div>
+    </div>
+  )
+}
+
+function CTA() {
+  return (
+    <div className='flex flex-col justify-start bg-red-500 items-center w-full h-full text-white'>
+      <h1 className=''>
+        Create your Yu-Gi-Oh deck!
+      </h1>
+      <p>
+        Build strategies, share your deck with friends, and more!
+      </p>
+      <Button />
+    </div>
+  );
+}
+
+function Button() {
+  return (
+    <Link href="/login">
+      <span>
+        Start now!
+      </span>
+    </Link>
   )
 }
