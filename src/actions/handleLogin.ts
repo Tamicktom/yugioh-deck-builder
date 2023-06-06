@@ -1,7 +1,6 @@
 "use server";
 import { FirebaseError } from "firebase/app";
 import firebase from "@/services/connectFirebase";
-import { log } from "console";
 import z from "zod";
 
 const credentialsSchema = z.object({
