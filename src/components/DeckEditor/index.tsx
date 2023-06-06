@@ -12,6 +12,7 @@ import { CSS } from '@dnd-kit/utilities';
 
 //* Local imports
 import addCardToDeck from "@/actions/addCardToDeck";
+import removeCardFromDeck from "@/actions/removeCardFromDeck";
 import type { APIResponse, CardData } from "@/types/yugioh-api-response";
 
 
@@ -19,11 +20,6 @@ export default function DeckEditor() {
   const [cardOnDeck, setCardOnDeck] = useState<CardData[]>([]);
   const [cardToAdd, setCardToAdd] = useState<CardData[]>([]);
   const [cardName, setCardName] = useState("");
-
-  useEffect(() => {
-    console.log("cardOnDeck", cardOnDeck);
-    console.log("cardToAdd", cardToAdd);
-  }, [cardOnDeck, cardToAdd]);
 
   function handleDragEnd(event: DragEndEvent) {
     console.log("drag end", event);
@@ -63,6 +59,9 @@ export default function DeckEditor() {
         setCardToAdd(cardToAdd.filter((card) => {
           return (card.id + "") !== activeId;
         }));
+
+        // add card to database
+        addCardToDeck(card);
       }
 
       return;
@@ -80,6 +79,9 @@ export default function DeckEditor() {
         }));
         // add card to waiting zone
         setCardToAdd([...cardToAdd, card]);
+
+        // remove card from database
+        removeCardFromDeck(card);
       }
       return;
     }
