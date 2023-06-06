@@ -121,7 +121,7 @@ export default function DeckEditor() {
               }
               return (
                 <Draggable id={`deck-${id}`} key={card.id}>
-                  <Image
+                  <img
                     src={card.card_images[0].image_url}
                     alt="Card image"
                     width={421 / 3}
@@ -157,7 +157,7 @@ export default function DeckEditor() {
                 }
                 return (
                   <Draggable id={`add-${card.id}`} key={card.id}>
-                    <Image
+                    <img
                       src={card.card_images[0].image_url}
                       alt="Card image"
                       width={421 / 3}
