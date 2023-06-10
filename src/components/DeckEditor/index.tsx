@@ -24,6 +24,12 @@ export default function DeckEditor() {
   const [cardToAdd, setCardToAdd] = useState<CardData[]>([]);
   const [cardName, setCardName] = useState("");
 
+  useEffect(() => {
+    loadCardsFromDeck().then((cards) => {
+      setCardOnDeck(cards);
+    });
+  }, []);
+
   function handleDragEnd(event: DragEndEvent) {
     console.log("drag end", event);
     let isDeck = false;
@@ -33,9 +39,6 @@ export default function DeckEditor() {
       isDeck = (event.active.id + "").includes("deck-");
       isAdd = (event.active.id + "").includes("add-");
     }
-    console.log("isDeck", isDeck);
-    console.log("isAdd", isAdd);
-    console.log("isOverDroppable", isOverDroppable);
     if (isOverDroppable && isDeck) {
       // do nothing
       return;

@@ -21,18 +21,8 @@ export default async function loadCardsFromDeck(): Promise<CardData[]> {
     if (userData && userData.cards) {
       // Retorna o array de cartas do deck
       // return userData.cards;
-      //for each card in userData.cards, fetch card data from api
       const cards = userData.cards;
-      const cardsData = [];
-      for (let i = 0; i < cards.length; i++) {
-        const card = cards[i];
-        const response = await fetch(
-          `https://db.ygoprodeck.com/api/v7/cardinfo.php?id=${card.id}`
-        );
-        const data: APIResponse = await response.json();
-        cardsData.push(data.data[0]);
-      }
-      return cardsData;
+      return cards;
     } else {
       console.log("Deck vazio");
       return [];
