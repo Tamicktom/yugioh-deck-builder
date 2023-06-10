@@ -30,7 +30,6 @@ export default function DeckEditor() {
   }, []);
 
   function handleDragEnd(event: DragEndEvent) {
-    console.log("drag end", event);
     let isDeck = false;
     let isAdd = false;
     let isOverDroppable = event.over?.id === "droppable";
@@ -92,10 +91,6 @@ export default function DeckEditor() {
     }
   }
 
-  function handleDragStart(event: DragStartEvent) {
-    console.log("drag start", event);
-  }
-
   async function handleSearchCard() {
     if (cardName === "") return;
     //verify if card name is already on deck
@@ -115,8 +110,8 @@ export default function DeckEditor() {
   }
 
   return (
-    <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-      <div className="flex flex-row w-full h-full min-h-screen overflow-hidden bg-red-500">
+    <DndContext onDragEnd={handleDragEnd}>
+      <div className="flex flex-row w-full h-full min-h-screen overflow-hidden">
         {/* left */}
         <DroppableDeckArea id="droppable">
           {
@@ -131,8 +126,8 @@ export default function DeckEditor() {
                   <img
                     src={card.card_images[0].image_url}
                     alt="Card image"
-                    width={421 / 3}
-                    height={614 / 3}
+                    width={421 / 2.75}
+                    height={614 / 2.75}
                   />
                 </Draggable>
               )
@@ -141,7 +136,7 @@ export default function DeckEditor() {
         </DroppableDeckArea>
 
         {/* right */}
-        <div className="w-full h-full min-h-screen bg-yellow-950">
+        <div className="w-3/4 h-full min-h-screen">
           <div>
             <p>Perquisar carta</p>
             <label htmlFor="">Digite o nome da carta</label>
@@ -167,8 +162,8 @@ export default function DeckEditor() {
                     <img
                       src={card.card_images[0].image_url}
                       alt="Card image"
-                      width={421 / 3}
-                      height={614 / 3}
+                      width={421 / 2.75}
+                      height={614 / 2.75}
                     />
                   </Draggable>
                 )
@@ -188,13 +183,13 @@ function DroppableDeckArea(props: any) {
 
   const style: CSSProperties = {
     backgroundColor: isOver ? 'green' : undefined,
-    width: '50%',
   }
 
   return (
     <div
       ref={setNodeRef}
       style={style}
+      className="flex flex-row flex-wrap items-start justify-start w-full min-h-screen gap-2 p-4 bg-blue-500"
     >
       {props.children}
     </div>
@@ -205,14 +200,25 @@ function Draggable(props: any) {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: props.id,
   });
+  const scale = 1.25;
   const style: CSSProperties = {
-    // Outputs `translate3d(x, y, 0)`
-    transform: CSS.Translate.toString(transform),
-    opacity: transform ? 0.7 : undefined,
+    // multiply by the scale to ensure the element stays in place
+    transform: transform ? `translate3d(${transform.x * (1 / scale)}px, ${transform.y * (1 / scale)}px, 0)` : undefined,
+    zIndex: transform ? 9999 : undefined,
+    opacity: transform ? 0.7 : 1,
+    scale: transform ? scale : 1,
+    transitionDuration: transform ? '.7s' : ".5s",
+    transitionProperty: transform ? "scale, opacity" : "scale, opacity, transform",
   };
 
   return (
-    <button ref={setNodeRef} style={style} {...listeners} {...attributes}>
+    <button
+      ref={setNodeRef}
+      style={style}
+      {...listeners}
+      {...attributes}
+      className="overflow-hidden transition-opacity rounded"
+    >
       {props.children}
     </button>
   );
