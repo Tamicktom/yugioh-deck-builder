@@ -13,6 +13,9 @@ import { CSS } from '@dnd-kit/utilities';
 //* Local imports
 import addCardToDeck from "@/actions/addCardToDeck";
 import removeCardFromDeck from "@/actions/removeCardFromDeck";
+import loadCardsFromDeck from "@/actions/loadCardsFromDeck";
+import addCardToDb from "@/actions/addCardToDb";
+import getCardFromDb from "@/actions/getCardFromDb";
 import type { APIResponse, CardData } from "@/types/yugioh-api-response";
 
 
@@ -99,14 +102,14 @@ export default function DeckEditor() {
     })
     if (cardOnDeckId) return;
 
-    const url = "https://db.ygoprodeck.com/api/v7/cardinfo.php?name=" + cardName;
-    const response = await fetch(url);
-    const { data }: APIResponse = await response.json();
-    if (data.length === 0) {
-      return;
-    }
-    const card: CardData = data[0];
+
+    const card = await getCardFromDb(cardName.toLowerCase());
+
+    if (!card) return;
+
     setCardToAdd([...cardToAdd, card]);
+    //add card to database
+    addCardToDb(card);
   }
 
   return (

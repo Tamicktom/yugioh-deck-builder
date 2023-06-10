@@ -23,11 +23,11 @@ export default async function addCardToDeck(card: CardData) {
 
     if (userData && userData.cards) {
       // Se já houver um array de cartas, adicione a nova carta a ele
-      const updatedCards = [...userData.cards, { id: card.id, name: card.name }];
+      const updatedCards = [...userData.cards, card];
       await userRef.update({ cards: updatedCards });
     } else {
       // Se ainda não houver um array de cartas, crie um novo com a nova carta
-      await userRef.set({ cards: [{ id: card.id, name: card.name }] });
+      await userRef.set({ cards: [card] });
     }
 
     console.log("Sucesso");
