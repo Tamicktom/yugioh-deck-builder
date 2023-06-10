@@ -1,7 +1,6 @@
 "use client";
 
 //* Libraries imports
-import Image from "next/image";
 import { useState, useEffect } from "react";
 import type { CSSProperties } from "react";
 import { useDroppable, useDraggable, DndContext } from "@dnd-kit/core";
@@ -16,7 +15,7 @@ import removeCardFromDeck from "@/actions/removeCardFromDeck";
 import loadCardsFromDeck from "@/actions/loadCardsFromDeck";
 import addCardToDb from "@/actions/addCardToDb";
 import getCardFromDb from "@/actions/getCardFromDb";
-import type { APIResponse, CardData } from "@/types/yugioh-api-response";
+import type { CardData } from "@/types/yugioh-api-response";
 
 
 export default function DeckEditor() {
