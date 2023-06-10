@@ -136,7 +136,7 @@ export default function DeckEditor() {
         </DroppableDeckArea>
 
         {/* right */}
-        <div className="w-3/4 h-full min-h-screen">
+        <div className="w-3/4 h-full min-h-screen p-4">
           <div>
             <p>Perquisar carta</p>
             <label htmlFor="">Digite o nome da carta</label>
@@ -158,7 +158,10 @@ export default function DeckEditor() {
                   id = id.replace("deck-", "");
                 }
                 return (
-                  <Draggable id={`add-${card.id}`} key={card.id}>
+                  <Draggable
+                    id={`add-${card.id}`}
+                    key={card.id}
+                  >
                     <img
                       src={card.card_images[0].image_url}
                       alt="Card image"
@@ -200,16 +203,27 @@ function Draggable(props: any) {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: props.id,
   });
+  const [zIndex, setZIndex] = useState<number | undefined>(undefined);
   const scale = 1.25;
   const style: CSSProperties = {
     // multiply by the scale to ensure the element stays in place
     transform: transform ? `translate3d(${transform.x * (1 / scale)}px, ${transform.y * (1 / scale)}px, 0)` : undefined,
-    zIndex: transform ? 9999 : undefined,
+    zIndex: zIndex,
     opacity: transform ? 0.7 : 1,
     scale: transform ? scale : 1,
     transitionDuration: transform ? '.7s' : ".5s",
     transitionProperty: transform ? "scale, opacity" : "scale, opacity, transform",
   };
+
+  useEffect(() => {
+    if (transform) {
+      setZIndex(9999);
+    } else {
+      setTimeout(() => {
+        setZIndex(undefined);
+      }, 500);
+    }
+  }, [transform]);
 
   return (
     <button
