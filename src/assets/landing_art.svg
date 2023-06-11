@@ -1,0 +1,46 @@
+<svg width="100%" height="100%" viewBox="0 0 2560 1080" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g id="Background">
+        <rect id="Background1" serif:id="Background" x="0" y="0" width="2560" height="1080"/>
+    </g>
+    <g id="Black-Hole" serif:id="Black Hole">
+        <g style="filter:url(#_Effect1);">
+            <ellipse cx="1280" cy="606.689" rx="233.097" ry="232.907" style="fill:#e04307;"/>
+        </g>
+        <g style="filter:url(#_Effect2);">
+            <ellipse cx="1280" cy="473.311" rx="235.982" ry="232.907" style="fill:#b15804;"/>
+        </g>
+        <circle cx="1280" cy="540" r="316.784" style="fill:#0e0e0e;"/>
+        <circle cx="1280" cy="540" r="299.595" style="fill:#0e0e0e;"/>
+        <clipPath id="_clip3">
+            <circle cx="1280" cy="540" r="299.595"/>
+        </clipPath>
+        <g clip-path="url(#_clip3)">
+            <use xlink:href="#_Image4" x="0" y="0" width="1000px" height="1000px" transform="matrix(0.682732,0,0,0.682732,938.634,198.634)"/>
+        </g>
+    </g>
+    <g id="Cards">
+        <use xlink:href="#_Image5" x="0" y="0" width="421px" height="614px" transform="matrix(0.313149,-0.180477,0.251691,0.272106,1346.32,773.886)"/>
+        <use xlink:href="#_Image6" x="0" y="0" width="421px" height="614px" transform="matrix(-0.103356,-0.290468,0.319844,-0.169821,734.651,704.973)"/>
+        <use xlink:href="#_Image7" x="0" y="0" width="421px" height="614px" transform="matrix(0.238232,0.0455287,-0.0415965,0.101694,1209.4,577.838)"/>
+        <use xlink:href="#_Image8" x="0" y="0" width="421px" height="614px" transform="matrix(0.278793,-0.0405146,-0.00133292,0.284874,1093.73,167.602)"/>
+        <use xlink:href="#_Image9" x="0" y="0" width="421px" height="614px" transform="matrix(-0.131466,0.28049,-0.386554,-0.0976614,1810.15,473.609)"/>
+        <use xlink:href="#_Image10" x="0" y="0" width="421px" height="614px" transform="matrix(0.327721,0.0974815,-0.324999,0.253731,805.128,183.66)"/>
+        <use xlink:href="#_Image11" x="0" y="0" width="421px" height="614px" transform="matrix(0.347255,0.177424,-0.21648,0.3273,958.726,690.298)"/>
+    </g>
+    <defs>
+        <filter id="_Effect1" filterUnits="userSpaceOnUse" x="-453.097" y="-1126.22" width="3466.19" height="3465.81">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="250"/>
+        </filter>
+        <filter id="_Effect2" filterUnits="userSpaceOnUse" x="-455.982" y="-1259.6" width="3471.96" height="3465.81">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="250"/>
+        </filter>
+        <image id="_Image4" width="1000px" height="1000px" xlink:href=""/>
+        <image id="_Image5" width="421px" height="614px" xlink:href=""/>
+        <image id="_Image6" width="421px" height="614px" xlink:href=""/>
+        <image id="_Image7" width="421px" height="614px" xlink:href=""/>
+        <image id="_Image8" width="421px" height="614px" xlink:href=""/>
+        <image id="_Image9" width="421px" height="614px" xlink:href=""/>
+        <image id="_Image10" width="421px" height="614px" xlink:href=""/>
+        <image id="_Image11" width="421px" height="614px" xlink:href=""/>
+    </defs>
+</svg>
