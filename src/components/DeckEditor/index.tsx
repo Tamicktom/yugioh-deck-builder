@@ -107,13 +107,11 @@ export default function DeckEditor() {
     if (cardOnDeckId) return;
 
 
-    const card = await getCardFromDb(cardName.toLowerCase());
+    const cards = await getCardFromDb(cardName.toLowerCase());
 
-    if (!card) return;
+    if (!cards) return;
 
-    setCardToAdd([...cardToAdd, card]);
-    //add card to database
-    addCardToDb(card);
+    setCardToAdd([...cards.cardData]);
   }
 
   return (
@@ -143,8 +141,8 @@ export default function DeckEditor() {
                   <img
                     src={card.card_images[0].image_url}
                     alt="Card image"
-                    width={421 / 2.75}
-                    height={614 / 2.75}
+                    width={421 / 3}
+                    height={614 / 3}
                   />
                 </Draggable>
               )
@@ -172,7 +170,8 @@ export default function DeckEditor() {
               Search
             </button>
           </div>
-          <div id="waiting_zone" className="flex flex-row flex-wrap items-start justify-center w-full h-full gap-4 p-4 rounded-lg bg-neutral-900">
+          <div id="waiting_zone" className="flex flex-row flex-wrap items-start justify-center w-full h-full gap-4 p-4 rounded-lg bg-neutral-900"
+          >
             {
               cardToAdd.map((card) => {
                 let id = card.id;
@@ -188,8 +187,8 @@ export default function DeckEditor() {
                     <img
                       src={card.card_images[0].image_url}
                       alt="Card image"
-                      width={421 / 2.75}
-                      height={614 / 2.75}
+                      width={421 / 3}
+                      height={614 / 3}
                     />
                   </Draggable>
                 )
@@ -227,7 +226,7 @@ function DroppableDeckArea(props: DroppableDeckAreaProps) {
       <div
         ref={setNodeRef}
         style={style}
-        className="grid w-full h-full grid-cols-10 gap-4 p-4 rounded-lg grid-rows-8"
+        className="flex flex-row flex-wrap w-full min-h-full h-fit gap-4 p-4 rounded-lg justify-start items-start"
       >
         {props.children}
       </div>

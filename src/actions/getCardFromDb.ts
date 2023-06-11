@@ -4,9 +4,22 @@ import type { APIResponse, CardData } from "@/types/yugioh-api-response";
 
 import addCardToDb from "./addCardToDb";
 
+type getCardResponse = {
+  cardData: CardData[];
+  meta: {
+    current_rows: number;
+    total_rows: number;
+    rows_remaining: number;
+    total_pages: number;
+    pages_remaining: number;
+    next_page: string;
+    next_page_offset: number;
+  };
+};
+
 export default async function getCardFromDb(
   cardName: string
-): Promise<CardData | undefined> {
+): Promise<getCardResponse | undefined> {
   //* Verify if user is logged in
   const userId = firebase.auth().currentUser?.uid;
   if (!userId) {
@@ -28,14 +41,25 @@ export default async function getCardFromDb(
     if (cardsDoc.exists) {
       console.log("Card found in database");
       const cardData = cardsDoc.data();
-      return cardData as CardData;
+      return {
+        cardData: cardData as CardData[],
+        meta: {
+          current_rows: 1,
+          total_rows: 1,
+          rows_remaining: 0,
+          total_pages: 1,
+          pages_remaining: 0,
+          next_page: "",
+          next_page_offset: 0,
+        },
+      };
     }
 
     console.log("Card not found in database");
 
     // if the document doesn't exist, fetch the card data from the api, add it to the database and return it
     const response = await fetch(
-      `https://db.ygoprodeck.com/api/v7/cardinfo.php?name=${cardName}`
+      `https://db.ygoprodeck.com/api/v7/cardinfo.php?&num=6&offset=0&fname=${cardName}`
     );
     const data: APIResponse = await response.json();
 
@@ -44,10 +68,23 @@ export default async function getCardFromDb(
       return;
     }
 
-    const cardData = data.data[0];
-    await addCardToDb(cardData);
+    // add each card to the database
+    data.data.forEach(async (card) => {
+      await addCardToDb(card);
+    });
 
-    return cardData;
+    return {
+      cardData: data.data,
+      meta: {
+        current_rows: data.meta?.current_rows || 0,
+        total_rows: data.meta?.total_rows || 0,
+        rows_remaining: data.meta?.rows_remaining || 0,
+        total_pages: data.meta?.total_pages || 0,
+        pages_remaining: data.meta?.pages_remaining || 0,
+        next_page: data.meta?.next_page || "",
+        next_page_offset: data.meta?.next_page_offset || 0,
+      }
+    };
   } catch (error) {
     console.error("Falha ao carregar a carta:", error);
   }
