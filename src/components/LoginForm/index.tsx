@@ -21,10 +21,10 @@ export default function LoginForm() {
   }
 
   return (
-    <form action={tryLogin} className="flex flex-col justify-center items-center text-black">
-      <input type="text" name="email" id="email" placeholder="Email" />
-      <input type="password" name="password" id="password" placeholder="Password" />
-      <button type="submit" className="text-white">Login</button>
+    <form action={tryLogin} className="flex flex-col items-center justify-center gap-4">
+      <input className="px-4 py-2 rounded-lg outline-none bg-neutral-600 text-neutral-100" type="text" name="email" id="email" placeholder="Email" />
+      <input className="px-4 py-2 rounded-lg outline-none bg-neutral-600 text-neutral-100" type="password" name="password" id="password" placeholder="Password" />
+      <button type="submit" className="px-4 py-2 font-bold uppercase rounded-lg text-neutral-100 bg-neutral-600 hover:bg-neutral-500">Login</button>
     </form>
   );
 }
