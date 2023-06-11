@@ -1,6 +1,7 @@
 "use client";
 
 //* Libraries imports
+import Image from "next/image";
 import { useState, useEffect, type ReactNode } from "react";
 import type { CSSProperties } from "react";
 import { useDroppable, useDraggable, DndContext } from "@dnd-kit/core";
@@ -15,7 +16,6 @@ import colors from "tailwindcss/colors";
 import addCardToDeck from "@/actions/addCardToDeck";
 import removeCardFromDeck from "@/actions/removeCardFromDeck";
 import loadCardsFromDeck from "@/actions/loadCardsFromDeck";
-import addCardToDb from "@/actions/addCardToDb";
 import getCardFromDb from "@/actions/getCardFromDb";
 import type { CardData } from "@/types/yugioh-api-response";
 
@@ -58,10 +58,10 @@ export default function DeckEditor() {
         return (card.id + "") === activeId;
       });
 
-      if (cardOnDeckId) return;
+      if (cardOnDeckId) return alert("Carta já adicionada!");
 
       //* if deck is full, return
-      if (cardOnDeck.length >= 60) return;
+      if (cardOnDeck.length >= 60) return alert("Deck cheio!");
 
       if (card) {
         // add card to deck
@@ -138,11 +138,13 @@ export default function DeckEditor() {
               }
               return (
                 <Draggable id={`deck-${id}`} key={card.id}>
-                  <img
-                    src={card.card_images[0].image_url}
+                  <Image
+                    src={card.card_images[0].image_url || "/card_bg.png"}
                     alt="Card image"
-                    width={421 / 3}
-                    height={614 / 3}
+                    width={421 / 3.5}
+                    height={614 / 3.5}
+                    placeholder="blur"
+                    blurDataURL={card.card_images[0].image_url_small}
                   />
                 </Draggable>
               )
@@ -151,7 +153,7 @@ export default function DeckEditor() {
         </DroppableDeckArea>
 
         {/* right */}
-        <div className="w-[480px] h-screen min-h-screen p-4 pl-0 flex flex-col justify-start items-start gap-4">
+        <div className="w-[512px] h-screen min-h-screen p-4 pl-0 flex flex-col justify-start items-start gap-4">
           <div className="flex flex-col items-center justify-center w-full gap-2 p-4 rounded-lg bg-neutral-900 h-fit">
             <div className="flex flex-col items-center justify-center">
               <label htmlFor="card_name_input">Digite o nome da carta</label>
@@ -170,7 +172,7 @@ export default function DeckEditor() {
               Search
             </button>
           </div>
-          <div id="waiting_zone" className="flex flex-row flex-wrap items-start justify-center w-full h-full gap-4 p-4 rounded-lg bg-neutral-900"
+          <div id="waiting_zone" className="flex flex-row flex-wrap items-start justify-center w-full h-full gap-2 p-4 rounded-lg bg-neutral-900"
           >
             {
               cardToAdd.map((card) => {
@@ -184,11 +186,13 @@ export default function DeckEditor() {
                     id={`add-${card.id}`}
                     key={card.id}
                   >
-                    <img
-                      src={card.card_images[0].image_url}
+                    <Image
+                      src={card.card_images[0].image_url || "/card_bg.png"}
                       alt="Card image"
-                      width={421 / 3}
-                      height={614 / 3}
+                      width={421 / 4}
+                      height={614 / 4}
+                      placeholder="blur"
+                      blurDataURL={card.card_images[0].image_url_small}
                     />
                   </Draggable>
                 )
@@ -212,21 +216,19 @@ function DroppableDeckArea(props: DroppableDeckAreaProps) {
     id: props.id,
   });
 
-  const style: CSSProperties = {
-    backgroundColor: isOver ? colors.neutral[800] : colors.neutral[900],
-  }
-
   return (
-    <div className="flex items-center justify-center w-full h-screen min-h-screen p-4 hide-scrollbar"
+    <div className="flex items-start justify-start w-full h-screen min-h-screen p-4 overflow-x-hidden overflow-y-scroll hide-scrollbar"
       style={{
-        overflowY: props.isDragging ? "visible" : "scroll",
-        overflowX: props.isDragging ? "visible" : "hidden",
+        zIndex: props.isDragging ? 9999 : undefined,
       }}
     >
       <div
         ref={setNodeRef}
-        style={style}
-        className="flex flex-row flex-wrap w-full min-h-full h-fit gap-4 p-4 rounded-lg justify-start items-start"
+        style={{
+          backgroundColor: isOver ? colors.neutral[800] : colors.neutral[900],
+          zIndex: props.isDragging ? 9999 : undefined,
+        }}
+        className="flex flex-row flex-wrap items-start justify-start w-full min-h-full gap-4 p-4 overflow-x-hidden rounded-lg h-fit"
       >
         {props.children}
       </div>
@@ -248,6 +250,8 @@ function Draggable(props: any) {
     scale: transform ? scale : 1,
     transitionDuration: transform ? '.7s' : ".5s",
     transitionProperty: transform ? "scale, opacity" : "scale, opacity, transform",
+    boxShadow: transform ? `0 0 0 2px ${colors.yellow[100]}, 0 0 16px ${colors.yellow[100]}` : undefined,
+    scrollSnapAlign: "start",
   };
 
   useEffect(() => {
