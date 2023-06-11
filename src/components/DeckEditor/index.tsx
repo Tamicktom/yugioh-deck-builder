@@ -1,11 +1,13 @@
 "use client";
 
 //* Libraries imports
-import { useState, useEffect } from "react";
+import { useState, useEffect, type ReactNode } from "react";
 import type { CSSProperties } from "react";
 import { useDroppable, useDraggable, DndContext } from "@dnd-kit/core";
 import type { DragEndEvent, DragStartEvent } from "@dnd-kit/core";
 import { CSS } from '@dnd-kit/utilities';
+
+import colors from "tailwindcss/colors";
 
 //* Components imports
 
@@ -22,6 +24,7 @@ export default function DeckEditor() {
   const [cardOnDeck, setCardOnDeck] = useState<CardData[]>([]);
   const [cardToAdd, setCardToAdd] = useState<CardData[]>([]);
   const [cardName, setCardName] = useState("");
+  const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
     loadCardsFromDeck().then((cards) => {
@@ -30,6 +33,7 @@ export default function DeckEditor() {
   }, []);
 
   function handleDragEnd(event: DragEndEvent) {
+    setIsDragging(false);
     let isDeck = false;
     let isAdd = false;
     let isOverDroppable = event.over?.id === "droppable";
@@ -55,6 +59,9 @@ export default function DeckEditor() {
       });
 
       if (cardOnDeckId) return;
+
+      //* if deck is full, return
+      if (cardOnDeck.length >= 60) return;
 
       if (card) {
         // add card to deck
@@ -110,10 +117,20 @@ export default function DeckEditor() {
   }
 
   return (
-    <DndContext onDragEnd={handleDragEnd}>
-      <div className="flex flex-row w-full h-full min-h-screen overflow-hidden">
+    <DndContext
+      onDragStart={() => {
+        setIsDragging(true);
+      }}
+      onDragEnd={handleDragEnd}
+    >
+      <div
+        className="flex flex-row w-full h-screen min-h-screen overflow-hidden"
+      >
         {/* left */}
-        <DroppableDeckArea id="droppable">
+        <DroppableDeckArea
+          id="droppable"
+          isDragging={isDragging}
+        >
           {
             cardOnDeck.map((card) => {
               let id = card.id;
@@ -136,20 +153,26 @@ export default function DeckEditor() {
         </DroppableDeckArea>
 
         {/* right */}
-        <div className="w-3/4 h-full min-h-screen p-4">
-          <div>
-            <p>Perquisar carta</p>
-            <label htmlFor="">Digite o nome da carta</label>
+        <div className="w-[480px] h-screen min-h-screen p-4 pl-0 flex flex-col justify-start items-start gap-4">
+          <div className="flex flex-col items-center justify-center w-full gap-2 p-4 rounded-lg bg-neutral-900 h-fit">
+            <div className="flex flex-col items-center justify-center">
+              <label htmlFor="card_name_input">Digite o nome da carta</label>
+            </div>
             <input
+              id="card_name_input"
               type="text"
-              className="text-black"
+              autoComplete="off"
+              className="p-2 rounded-lg outline-none text-neutral-100 bg-neutral-700"
               onChange={(e) => setCardName(e.target.value)}
             />
-            <button onClick={handleSearchCard}>
+            <button
+              onClick={handleSearchCard}
+              className="flex items-center justify-center p-2 font-bold uppercase rounded-lg bg-neutral-600 text-neutral-100"
+            >
               Search
             </button>
           </div>
-          <div id="waiting_zone">
+          <div id="waiting_zone" className="flex flex-row flex-wrap items-start justify-center w-full h-full gap-4 p-4 rounded-lg bg-neutral-900">
             {
               cardToAdd.map((card) => {
                 let id = card.id;
@@ -179,22 +202,35 @@ export default function DeckEditor() {
   );
 }
 
-function DroppableDeckArea(props: any) {
+type DroppableDeckAreaProps = {
+  id: string;
+  children: ReactNode;
+  isDragging: boolean;
+}
+
+function DroppableDeckArea(props: DroppableDeckAreaProps) {
   const { isOver, setNodeRef } = useDroppable({
     id: props.id,
   });
 
   const style: CSSProperties = {
-    backgroundColor: isOver ? 'green' : undefined,
+    backgroundColor: isOver ? colors.neutral[800] : colors.neutral[900],
   }
 
   return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      className="flex flex-row flex-wrap items-start justify-start w-full min-h-screen gap-2 p-4 bg-blue-500"
+    <div className="flex items-center justify-center w-full h-screen min-h-screen p-4 hide-scrollbar"
+      style={{
+        overflowY: props.isDragging ? "visible" : "scroll",
+        overflowX: props.isDragging ? "visible" : "hidden",
+      }}
     >
-      {props.children}
+      <div
+        ref={setNodeRef}
+        style={style}
+        className="grid w-full h-full grid-cols-10 gap-4 p-4 rounded-lg grid-rows-8"
+      >
+        {props.children}
+      </div>
     </div>
   )
 }
@@ -231,7 +267,7 @@ function Draggable(props: any) {
       style={style}
       {...listeners}
       {...attributes}
-      className="overflow-hidden transition-opacity rounded"
+      className="overflow-hidden transition-opacity rounded w-fit h-fit"
     >
       {props.children}
     </button>
