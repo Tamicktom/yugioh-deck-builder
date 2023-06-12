@@ -42,7 +42,7 @@ export default async function getCardFromDb(
       console.log("Card found in database");
       const cardData = cardsDoc.data();
       return {
-        cardData: cardData as CardData[],
+        cardData: [cardData as CardData],
         meta: {
           current_rows: 1,
           total_rows: 1,
