@@ -42,7 +42,7 @@ export default async function getCardFromDb(
       console.log("Card found in database");
       const cardData = cardsDoc.data();
       return {
-        cardData: cardData as CardData[],
+        cardData: [cardData as CardData],
         meta: {
           current_rows: 1,
           total_rows: 1,
@@ -59,7 +59,7 @@ export default async function getCardFromDb(
 
     // if the document doesn't exist, fetch the card data from the api, add it to the database and return it
     const response = await fetch(
-      `https://db.ygoprodeck.com/api/v7/cardinfo.php?&num=12&offset=0&fname=${cardName}`
+      `https://db.ygoprodeck.com/api/v7/cardinfo.php?&num=12  &offset=0&fname=${cardName}`
     );
     const data: APIResponse = await response.json();
 

@@ -15,6 +15,7 @@ export default function BackgroundArt(props: SVGProps<SVGSVGElement>) {
         clipRule: "evenodd",
         strokeLinejoin: "round",
         strokeMiterlimit: 2,
+        height: "100%",
       }}
       viewBox="0 0 2560 1080"
       {...props}
