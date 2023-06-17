@@ -16,7 +16,7 @@ export default function Home() {
         <CTA />
 
         {/* right side */}
-        <div className="flex flex-col w-1/4 h-full bg-yellow-500" />
+        <div className="flex flex-col w-1/4 h-full" />
       </div>
     </div>
   )
